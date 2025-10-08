@@ -10,13 +10,12 @@ import br.com.gregoriohd.service.DBService;
 @Configuration
 @Profile("dev")
 public class TestConfig {
-	
-	
+
 	@Autowired
 	private DBService dbService;
 
-    @Bean
-    public DBService instanciaDB() {
+	@Bean
+	public DBService instanciaDB() {
 		this.dbService.instanciaDBService();
 		return this.dbService;
 	}

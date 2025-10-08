@@ -23,7 +23,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public abstract class Pessoa implements Serializable{
 	
@@ -31,6 +31,7 @@ public abstract class Pessoa implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@EqualsAndHashCode.Include
 	protected Integer id;
 
 	protected String nome;
@@ -46,7 +47,7 @@ public abstract class Pessoa implements Serializable{
 	@CollectionTable(name = "PERFIS")
 	protected Set<Integer> perfis = new HashSet<>();
 	
-	@JsonFormat(pattern = "dd/MM/aaaa")
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	protected LocalDate datacriacao = LocalDate.now();
 	
 	public Pessoa(Integer id, String nome, String cpf, String email, String senha) {

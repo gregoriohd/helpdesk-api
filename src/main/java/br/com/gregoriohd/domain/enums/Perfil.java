@@ -6,7 +6,7 @@ public enum Perfil {
 	private Integer codigo;
 	private String descricao;
 
-	private Perfil(int codigo, String descricao) {
+	private Perfil(Integer codigo, String descricao) {
 		this.codigo = codigo;
 		this.descricao = descricao;
 	}

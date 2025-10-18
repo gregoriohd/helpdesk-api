@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class ResourceExceptionHandler {
 
 	@ExceptionHandler(ObjectNotFoudException.class)
@@ -18,6 +18,16 @@ public class ResourceExceptionHandler {
 		StandardError erro = new StandardError(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(),
 				"Objeto nao encontrado", ex.getMessage(), http.getRequestURI());
 
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+	}
+	
+	@ExceptionHandler(ObjectNotSaveException.class)
+	public ResponseEntity<StandardError> objNotSaveEx(ObjectNotSaveException ex, HttpServletRequest http) {
+
+		HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
+		StandardError erro = new StandardError(LocalDateTime.now(), status.value(),
+				"Objeto nao foi persistido", ex.getMessage(), http.getRequestURI());
+
+		return ResponseEntity.status(erro.getStatus()).body(erro);
 	}
 }

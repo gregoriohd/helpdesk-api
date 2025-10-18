@@ -24,10 +24,10 @@ public class TecnicoService {
 
 	}
 
-	public void save(TecnicoRequest request) {
+	public Tecnico save(TecnicoRequest request) {
 		Tecnico t = new Tecnico(null, request.nome(), request.cpf(), request.email(), request.senha());
 		
-		tecnicoRepository.save(t);
+		return tecnicoRepository.save(t);
 	}
 	
 	public List<Tecnico> findAll(Example<Tecnico> example){

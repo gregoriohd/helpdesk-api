@@ -1,8 +1,10 @@
 package br.com.gregoriohd.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import br.com.gregoriohd.domain.Tecnico;
@@ -26,5 +28,10 @@ public class TecnicoService {
 		Tecnico t = new Tecnico(null, request.nome(), request.cpf(), request.email(), request.senha());
 		
 		tecnicoRepository.save(t);
+	}
+	
+	public List<Tecnico> findAll(Example<Tecnico> example){
+		
+		return tecnicoRepository.findAll(example);
 	}
 }

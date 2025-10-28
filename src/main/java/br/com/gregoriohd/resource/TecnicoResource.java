@@ -30,23 +30,20 @@ public class TecnicoResource {
 	private TecnicoService tecnicoService;
 
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody TecnicoRequest request) {
+	public ResponseEntity<TecnicoDTO> create(@RequestBody TecnicoRequest request) {
 
-		try {
-			Tecnico t = tecnicoService.save(request);
-		    return ResponseEntity.status(HttpStatus.CREATED).build();
-		} catch (DataIntegrityViolationException ds) {
-			throw new ObjectNotSaveException("Tecnico não pôde ser salvo", ds);
-		}
-		
+			TecnicoDTO dto = tecnicoService.save(request);
+
+			return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+
+	
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<TecnicoDTO> findById(@PathVariable Integer id) {
 
-		final Tecnico tecnico = tecnicoService.findById(id).orElseThrow(
-				()-> new ObjectNotFoudException(
-						"Tecnico nao encontrado id: ".concat(id.toString()) ));
+		final Tecnico tecnico = tecnicoService.findById(id)
+				.orElseThrow(() -> new ObjectNotFoudException("Tecnico nao encontrado id: ".concat(id.toString())));
 		if (tecnico != null) {
 			/*
 			 * TecnicoDTO dto = new TecnicoDTO(tecnico.getId(), tecnico.getNome(),

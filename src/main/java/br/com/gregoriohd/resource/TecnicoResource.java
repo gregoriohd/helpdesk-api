@@ -3,7 +3,6 @@ package br.com.gregoriohd.resource;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -19,8 +18,8 @@ import br.com.gregoriohd.domain.Tecnico;
 import br.com.gregoriohd.domain.dto.TecnicoDTO;
 import br.com.gregoriohd.domain.request.TecnicoRequest;
 import br.com.gregoriohd.exception.ObjectNotFoudException;
-import br.com.gregoriohd.exception.ObjectNotSaveException;
 import br.com.gregoriohd.service.TecnicoService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/tecnicos")
@@ -30,7 +29,7 @@ public class TecnicoResource {
 	private TecnicoService tecnicoService;
 
 	@PostMapping
-	public ResponseEntity<TecnicoDTO> create(@RequestBody TecnicoRequest request) {
+	public ResponseEntity<TecnicoDTO> create(@RequestBody @Valid TecnicoRequest request) {
 
 			TecnicoDTO dto = tecnicoService.save(request);
 

@@ -34,6 +34,7 @@ public abstract class Pessoa implements Serializable{
 	@EqualsAndHashCode.Include
 	protected Integer id;
 
+
 	protected String nome;
 	
 	@Column(unique = true)

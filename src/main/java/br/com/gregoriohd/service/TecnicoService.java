@@ -34,7 +34,7 @@ public class TecnicoService {
 
 	public TecnicoDTO save(TecnicoRequest request) {
 		Tecnico t = new Tecnico(null, request.nome(), request.cpf(), request.email(), request.senha());
-		t.addPerfil(Perfil.toEnum(request.perfil()));
+		//t.addPerfil(Perfil.toEnum(request.perfil()));
 		validaCPF(t);
 		validaEmail(t);
 		t = tecnicoRepository.save(t);

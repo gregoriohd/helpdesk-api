@@ -22,18 +22,11 @@ import br.com.gregoriohd.domain.enums.Perfil;
  */
 
 public record TecnicoDTO(Integer id, String nome, String email, Set<Perfil> perfis,
-        @JsonFormat(pattern = "dd/MM/yyyy") LocalDate datacriacao) implements Serializable {
-    
-    // Método factory para criar a partir de Tecnico
-    public static TecnicoDTO from(Tecnico tecnico) {
-        return new TecnicoDTO(
-            tecnico.getId(),
-            tecnico.getNome(),
-            tecnico.getEmail(),
-            tecnico.getPerfis(),
-            tecnico.getDatacriacao()
-        );
-    }
-}
+		@JsonFormat(pattern = "dd/MM/yyyy") LocalDate datacriacao) implements Serializable {
 
- 
+	// Método factory para criar a partir de Tecnico
+	public static TecnicoDTO from(Tecnico tecnico) {
+		return new TecnicoDTO(tecnico.getId(), tecnico.getNome(), tecnico.getEmail(), tecnico.getPerfis(),
+				tecnico.getDatacriacao());
+	}
+}

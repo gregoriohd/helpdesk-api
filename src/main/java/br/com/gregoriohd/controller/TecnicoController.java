@@ -1,4 +1,4 @@
-package br.com.gregoriohd.resource;
+package br.com.gregoriohd.controller;
 
 import java.util.List;
 
@@ -7,9 +7,11 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +25,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/tecnicos")
-public class TecnicoResource {
+public class TecnicoController {
 
 	@Autowired
 	private TecnicoService tecnicoService;
@@ -31,11 +33,23 @@ public class TecnicoResource {
 	@PostMapping
 	public ResponseEntity<TecnicoDTO> create(@RequestBody @Valid TecnicoRequest request) {
 
-			TecnicoDTO dto = tecnicoService.save(request);
+		TecnicoDTO dto = tecnicoService.save(request);
 
-			return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(dto);
 
+	}
+
+	@PutMapping("{id}")
+	public ResponseEntity<TecnicoDTO> update(@PathVariable Integer id, @RequestBody @Valid TecnicoRequest tecnicoReq) {
+		TecnicoDTO dto = tecnicoService.update(id, tecnicoReq);
+		return ResponseEntity.status(HttpStatus.OK).body(dto);
+	}
 	
+	@DeleteMapping("{id}")
+	public ResponseEntity<Integer> delete(@PathVariable Integer id) {
+		tecnicoService.delete(id);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(id);
 	}
 
 	@GetMapping("/{id}")
@@ -60,7 +74,7 @@ public class TecnicoResource {
 	}
 
 	@GetMapping("/nome/{nome}")
-	public ResponseEntity<?> findAll(@PathVariable String nome) {
+	public ResponseEntity<?> findAllName(@PathVariable String nome) {
 
 		Tecnico t = new Tecnico();
 		t.setNome(nome);
@@ -70,7 +84,7 @@ public class TecnicoResource {
 
 		Example<Tecnico> e = Example.of(t, matcher);
 
-		final List<Tecnico> tecnicos = tecnicoService.findAll(e);
+		final List<TecnicoDTO> tecnicos = tecnicoService.findAllName(e);
 		if (!tecnicos.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.OK).body(tecnicos);
 		}

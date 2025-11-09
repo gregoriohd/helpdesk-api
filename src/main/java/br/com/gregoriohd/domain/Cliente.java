@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.gregoriohd.domain.enums.Perfil;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
@@ -19,10 +20,12 @@ public class Cliente extends Pessoa{
 
 	public Cliente() {
 		super();
+		addPerfil(Perfil.CLIENTE);
 	}
 
 	public Cliente(Integer id, String nome, String cpf, String email, String senha) {
 		super(id, nome, cpf, email, senha);
+		addPerfil(Perfil.CLIENTE);
 	}
 
 	public List<Chamado> getChamados() {

@@ -71,7 +71,8 @@ public class TecnicoService {
 
 		List<Tecnico> tecnicos = tecnicoRepository.findAll(example);
 
-		List<TecnicoDTO> tecnicoDTOs = tecnicos.stream().map(tecnico -> TecnicoDTO.from(tecnico)).toList();
+		List<TecnicoDTO> tecnicoDTOs = tecnicos.stream()
+				.map(tecnico -> TecnicoDTO.from(tecnico)).toList();
 		return tecnicoDTOs;
 	}
 

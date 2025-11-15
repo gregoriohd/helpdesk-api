@@ -58,12 +58,6 @@ public class TecnicoController {
 		final Tecnico tecnico = tecnicoService.findById(id)
 				.orElseThrow(() -> new ObjectNotFoudException("Tecnico nao encontrado id: ".concat(id.toString())));
 		if (tecnico != null) {
-			/*
-			 * TecnicoDTO dto = new TecnicoDTO(tecnico.getId(), tecnico.getNome(),
-			 * tecnico.getEmail(), tecnico.getPerfis(), tecnico.getDatacriacao());
-			 */
-
-//			TecnicoDTO dto = new TecnicoDTO(tecnico);
 
 			TecnicoDTO dto = TecnicoDTO.from(tecnico);
 

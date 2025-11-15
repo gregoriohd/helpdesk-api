@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,11 +44,17 @@ public class ChamadoController {
 	}
 	
 	@PostMapping
-	public  ResponseEntity<?> abrirChmado(@RequestBody ChamadoDTO chamadoDto) {
+	public  ResponseEntity<?> abrirChamado(@RequestBody ChamadoDTO chamadoDto) {
 		chamadoService.abrirChamado(chamadoDto);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
+	@PatchMapping("/{id}/tecnico/{tecnicoId}")
+	public  ResponseEntity<?> fecharChamado(@PathVariable Integer id, 
+			@PathVariable Integer tecnicoId){
+		chamadoService.fecharChamado(id, tecnicoId);
+		return ResponseEntity.status(HttpStatus.OK).body("{\"message\" : \"chamado fechado\"}");
+	}
 	
 }

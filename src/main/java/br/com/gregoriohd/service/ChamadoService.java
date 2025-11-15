@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import br.com.gregoriohd.domain.Chamado;
 import br.com.gregoriohd.domain.Cliente;
 import br.com.gregoriohd.domain.Tecnico;

@@ -25,7 +25,7 @@ public class ChamadoService {
 	private ChamadoRepository chamadoRepository;
 
 	@Autowired
-	private ClienteService service;
+	private ClienteService clienteService;
 
 	@Autowired
 	private TecnicoService tecnicoService;
@@ -44,7 +44,7 @@ public class ChamadoService {
 	}
 
 	public void abrirChamado(ChamadoDTO chamado) {
-		ClienteDTO c = service.findById(chamado.cliente());
+		ClienteDTO c = clienteService.findById(chamado.cliente());
 		Tecnico t = tecnicoService.findById(chamado.tecnico()).get();
 		Cliente ct = new Cliente();
 		ct.setId(c.id());
@@ -64,24 +64,24 @@ public class ChamadoService {
 	}
 
 	public void fecharChamado(Integer id, Integer tecnicoId) {
-		Chamado dto = chamadoRepository.findById(id)
+		Chamado chamado = chamadoRepository.findById(id)
 				.orElseThrow(() -> new ObjectNotFoudException("Chamado com o id: " + id + " nao encontrado"));
 		Tecnico t = tecnicoService.findById(tecnicoId)
 				.orElseThrow(() -> new ObjectNotFoudException("Tecnico com o id: " + id + " nao encontrado"));
 
-		if (dto.getTecnico().getId() != t.getId()) {
+		if (chamado.getTecnico().getId() != t.getId()) {
 			throw new ObjectNotFoudException("Chamado nao pertence ao tecncio informado");
 		}
 		
-		if (dto.getStatus().getCodigo() == 2) {
+		if (chamado.getStatus().getCodigo() == 2) {
 		
-			throw new ObjectNotFoudException("Chamado encerrado na data " + dto.getDataFechamento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+			throw new ObjectNotFoudException("Chamado encerrado na data " + chamado.getDataFechamento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 		}
 
-		dto.setDataFechamento(LocalDate.now());
-		dto.setStatus(dto.getStatus().ENCERRADO);
+		chamado.setDataFechamento(LocalDate.now());
+		chamado.setStatus(chamado.getStatus().ENCERRADO);
 
-		chamadoRepository.save(dto);
+		chamadoRepository.save(chamado);
 	}
 
 }

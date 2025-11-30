@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import br.com.gregoriohd.domain.Pessoa;
 import br.com.gregoriohd.domain.Tecnico;
 import br.com.gregoriohd.domain.dto.TecnicoDTO;
-import br.com.gregoriohd.domain.request.TecnicoRequest;
+import br.com.gregoriohd.domain.dto.request.TecnicoRequest;
 import br.com.gregoriohd.repsository.PessoaRepository;
 import br.com.gregoriohd.repsository.TecnicoRepository;
 

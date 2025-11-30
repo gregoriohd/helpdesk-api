@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gregoriohd.domain.Tecnico;
 import br.com.gregoriohd.domain.dto.TecnicoDTO;
-import br.com.gregoriohd.domain.request.TecnicoRequest;
+import br.com.gregoriohd.domain.dto.request.TecnicoRequest;
 import br.com.gregoriohd.exception.ObjectNotFoudException;
 import br.com.gregoriohd.service.TecnicoService;
 import jakarta.validation.Valid;

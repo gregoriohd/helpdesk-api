@@ -1,4 +1,4 @@
-package br.com.gregoriohd.domain.request;
+package br.com.gregoriohd.domain.dto.request;
 
 import java.io.Serializable;
 

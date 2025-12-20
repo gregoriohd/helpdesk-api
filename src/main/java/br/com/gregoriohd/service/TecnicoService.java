@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.gregoriohd.domain.Pessoa;
@@ -23,6 +24,9 @@ public class TecnicoService {
 
 	@Autowired
 	private PessoaRepository pessoaRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 
 	public Optional<Tecnico> findById(Integer id) {
 		Optional<Tecnico> tecnico = tecnicoRepository.findById(id);
@@ -50,7 +54,7 @@ public class TecnicoService {
 		t.setNome(request.nome());
 		t.setCpf(request.cpf());
 		t.setEmail(request.email());
-		t.setSenha(request.senha());
+		t.setSenha(encoder.encode(request.senha()));
 
 		t = tecnicoRepository.save(t);
 
@@ -58,7 +62,7 @@ public class TecnicoService {
 	}
 
 	public TecnicoDTO save(TecnicoRequest request) {
-		Tecnico t = new Tecnico(null, request.nome(), request.cpf(), request.email(), request.senha());
+		Tecnico t = new Tecnico(null, request.nome(), request.cpf(), request.email(), encoder.encode(request.senha()));
 		// t.addPerfil(Perfil.toEnum(request.perfil()));
 		validaCPF(t);
 		validaEmail(t);

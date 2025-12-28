@@ -1,6 +1,7 @@
 package br.com.gregoriohd.domain.dto.request;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -9,6 +10,6 @@ public record TecnicoRequest(
 		@NotNull(message = "Campo CPF eh orbigatorio")String cpf, 
 		@NotNull(message = "CAMPO email eh obrigatorio")String email, 
 		@NotNull(message = "campo senha eh OBRIGATORIO")String senha, 
-		Integer perfil) implements Serializable {
+		Set<Integer> perfis) implements Serializable {
 
 }

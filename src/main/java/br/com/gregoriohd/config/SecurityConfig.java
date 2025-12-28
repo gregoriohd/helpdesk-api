@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,16 +22,23 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import br.com.gregoriohd.security.JWTAuthenticationFilter;
+import br.com.gregoriohd.security.JWTAuthorizationFilter;
 import br.com.gregoriohd.security.JWTUtil;
+import br.com.gregoriohd.security.service.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
+
 	@Autowired
 	private Environment env;
 	
 	@Autowired
 	private JWTUtil jwtUtil;
+	
+	@Autowired
+	private UserDetailsServiceImpl detailsServiceImpl;
 
 	//ponto de partida do spring security monitora os endpoints e filtras a solicitacoes
 	@Bean
@@ -53,6 +63,9 @@ public class SecurityConfig {
 		
 		http.addFilterAt(new JWTAuthenticationFilter(authenticationManager, jwtUtil), 
 				UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(
+				new JWTAuthorizationFilter(authenticationManager, jwtUtil, detailsServiceImpl)
+				,UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
@@ -80,25 +93,5 @@ public class SecurityConfig {
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
 	    return config.getAuthenticationManager();
 	}
-	
-	/*
-	 * @Bean public WebSecurityCustomizer webSecurityCustomizer() { return (web) ->
-	 * web.ignoring() // Spring Security should completely ignore URLs starting with
-	 * /resources/ .requestMatchers("/resources/**"); }
-	 * 
-	 * @Bean public SecurityFilterChain securityFilterChain(HttpSecurity http)
-	 * throws Exception {
-	 * http.authorizeHttpRequests().requestMatchers("/public/**").permitAll().
-	 * anyRequest() .hasRole("USER").and() // Possibly more configuration ...
-	 * .formLogin() // enable form based log in // set permitAll for all URLs
-	 * associated with Form Login .permitAll(); return http.build(); }
-	 * 
-	 * @Bean public UserDetailsService userDetailsService() { UserDetails user =
-	 * User.withDefaultPasswordEncoder() .username("user") .password("password")
-	 * .roles("USER") .build(); UserDetails admin =
-	 * User.withDefaultPasswordEncoder() .username("admin") .password("password")
-	 * .roles("ADMIN", "USER") .build(); return new InMemoryUserDetailsManager(user,
-	 * admin); }
-	 */
 
 }

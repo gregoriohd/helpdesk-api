@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.gregoriohd.domain.enums.Perfil;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 

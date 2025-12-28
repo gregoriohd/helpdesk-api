@@ -37,11 +37,17 @@ public class TecnicoService {
 	
 	public void delete(Integer id) {
 
-		Tecnico t = findById(id).get();
+		
+		Optional<Tecnico> opt = tecnicoRepository.findById(id);
+		
+		Tecnico t = opt.orElseThrow(() -> 
+		    new DataIntegrityViolationException(
+		        "Não é possível remover o técnico informado, existem chamados em aberto para ele")
+		);
 
-		if(!t.getChamados().isEmpty())
-			throw new DataIntegrityViolationException("Nao e possivel remover o tecncio informado, exeiste chamados em "
-					+ "aberto para ele");
+//		if(!t.getChamados().isEmpty())
+//			throw new DataIntegrityViolationException("Nao e possivel remover o tecncio informado, exeiste chamados em "
+//					+ "aberto para ele");
 		tecnicoRepository.delete(t);
 
 	}
@@ -49,12 +55,14 @@ public class TecnicoService {
 	public TecnicoDTO update(Integer id, TecnicoRequest request) {
 
 		Tecnico t = findById(id).get();
-
+		
+		System.out.println(request);
 		t.setId(id);
 		t.setNome(request.nome());
 		t.setCpf(request.cpf());
 		t.setEmail(request.email());
 		t.setSenha(encoder.encode(request.senha()));
+		t.setPerfis(request.perfis());
 
 		t = tecnicoRepository.save(t);
 

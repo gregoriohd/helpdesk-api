@@ -7,6 +7,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gregoriohd.domain.Tecnico;
 import br.com.gregoriohd.domain.dto.TecnicoDTO;
-import br.com.gregoriohd.domain.request.TecnicoRequest;
+import br.com.gregoriohd.domain.dto.request.TecnicoRequest;
 import br.com.gregoriohd.exception.ObjectNotFoudException;
 import br.com.gregoriohd.service.TecnicoService;
 import jakarta.validation.Valid;
@@ -30,6 +31,7 @@ public class TecnicoController {
 	@Autowired
 	private TecnicoService tecnicoService;
 
+
 	@PostMapping
 	public ResponseEntity<TecnicoDTO> create(@RequestBody @Valid TecnicoRequest request) {
 
@@ -39,13 +41,14 @@ public class TecnicoController {
 
 	}
 
-	@PutMapping("{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<TecnicoDTO> update(@PathVariable Integer id, @RequestBody @Valid TecnicoRequest tecnicoReq) {
 		TecnicoDTO dto = tecnicoService.update(id, tecnicoReq);
 		return ResponseEntity.status(HttpStatus.OK).body(dto);
 	}
 	
-	@DeleteMapping("{id}")
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Integer> delete(@PathVariable Integer id) {
 		tecnicoService.delete(id);
 		

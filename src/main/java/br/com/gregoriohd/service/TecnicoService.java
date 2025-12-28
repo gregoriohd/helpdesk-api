@@ -6,12 +6,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.gregoriohd.domain.Pessoa;
 import br.com.gregoriohd.domain.Tecnico;
 import br.com.gregoriohd.domain.dto.TecnicoDTO;
-import br.com.gregoriohd.domain.request.TecnicoRequest;
+import br.com.gregoriohd.domain.dto.request.TecnicoRequest;
 import br.com.gregoriohd.repsository.PessoaRepository;
 import br.com.gregoriohd.repsository.TecnicoRepository;
 
@@ -23,6 +24,9 @@ public class TecnicoService {
 
 	@Autowired
 	private PessoaRepository pessoaRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 
 	public Optional<Tecnico> findById(Integer id) {
 		Optional<Tecnico> tecnico = tecnicoRepository.findById(id);
@@ -33,11 +37,17 @@ public class TecnicoService {
 	
 	public void delete(Integer id) {
 
-		Tecnico t = findById(id).get();
+		
+		Optional<Tecnico> opt = tecnicoRepository.findById(id);
+		
+		Tecnico t = opt.orElseThrow(() -> 
+		    new DataIntegrityViolationException(
+		        "Não é possível remover o técnico informado, existem chamados em aberto para ele")
+		);
 
-		if(!t.getChamados().isEmpty())
-			throw new DataIntegrityViolationException("Nao e possivel remover o tecncio informado, exeiste chamados em "
-					+ "aberto para ele");
+//		if(!t.getChamados().isEmpty())
+//			throw new DataIntegrityViolationException("Nao e possivel remover o tecncio informado, exeiste chamados em "
+//					+ "aberto para ele");
 		tecnicoRepository.delete(t);
 
 	}
@@ -45,12 +55,14 @@ public class TecnicoService {
 	public TecnicoDTO update(Integer id, TecnicoRequest request) {
 
 		Tecnico t = findById(id).get();
-
+		
+		System.out.println(request);
 		t.setId(id);
 		t.setNome(request.nome());
 		t.setCpf(request.cpf());
 		t.setEmail(request.email());
-		t.setSenha(request.senha());
+		t.setSenha(encoder.encode(request.senha()));
+		t.setPerfis(request.perfis());
 
 		t = tecnicoRepository.save(t);
 
@@ -58,7 +70,7 @@ public class TecnicoService {
 	}
 
 	public TecnicoDTO save(TecnicoRequest request) {
-		Tecnico t = new Tecnico(null, request.nome(), request.cpf(), request.email(), request.senha());
+		Tecnico t = new Tecnico(null, request.nome(), request.cpf(), request.email(), encoder.encode(request.senha()));
 		// t.addPerfil(Perfil.toEnum(request.perfil()));
 		validaCPF(t);
 		validaEmail(t);

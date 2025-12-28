@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -80,5 +81,15 @@ public class ResourceExceptionHandler {
 		}
 		return ResponseEntity.status(erro.getStatus()).body(erro);
 	}
+	
+//	@ExceptionHandler(BadCredentialsException.class)
+//	public ResponseEntity<StandardError> credentialsUnautorized(BadCredentialsException ex, HttpServletRequest http) {
+//
+//		HttpStatus status = HttpStatus.UNAUTHORIZED;
+//		StandardError erro = new StandardError(LocalDateTime.now(), status.value(),
+//				"Email ou senha invalidos", ex.getMessage(), http.getRequestURI());
+//
+//		return ResponseEntity.status(erro.getStatus()).body(erro);
+//	}
 
 }

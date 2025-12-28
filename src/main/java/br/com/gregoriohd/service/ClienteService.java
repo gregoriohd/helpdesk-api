@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.gregoriohd.domain.Cliente;
@@ -21,6 +22,9 @@ public class ClienteService {
 
 	@Autowired
 	private PessoaRepository pessoaRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 
 	public ClienteDTO findById(Integer id) {
 		Cliente cliente = clienteRepository.findById(id)
@@ -29,7 +33,7 @@ public class ClienteService {
 	}
 	
 	public ClienteDTO save(ClienteDTO dto) {
-		Cliente cliente = new Cliente(null, dto.nome(), dto.cpf(), dto.email(), dto.senha());
+		Cliente cliente = new Cliente(null, dto.nome(), dto.cpf(), dto.email(),encoder.encode(dto.senha()));
 		dto.perfis().stream().forEach(perfil -> cliente.addPerfil(perfil));
 		validaCPF(cliente);
 		validaEmail(cliente);

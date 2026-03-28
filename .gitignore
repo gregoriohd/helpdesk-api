@@ -6,6 +6,7 @@ target/
 .env
 
 ### STS ###
+TestConfig.java
 .apt_generated
 .classpath
 .factorypath
